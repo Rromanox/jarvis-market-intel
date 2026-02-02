@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Lessons - Jarvis Market Intelligence</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #12121a;
+            --accent: #00d4ff;
+            --accent2: #7c3aed;
+            --text: #e4e4e7;
+            --muted: #71717a;
+            --green: #10b981;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+        nav {
+            text-align: center;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        nav a:hover { color: var(--accent); background: rgba(0,212,255,0.1); }
+        nav a.active { color: var(--accent); background: rgba(0,212,255,0.1); }
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid #222;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--green), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .tagline { color: var(--muted); font-size: 1rem; }
+        .learning-session {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #222;
+        }
+        .session-date {
+            color: var(--green);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .session h2 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+        .session p { color: var(--muted); margin-bottom: 1rem; }
+        .session a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .memory-tag {
+            display: inline-block;
+            background: rgba(16,185,129,0.1);
+            color: var(--green);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .folder-tag { background: rgba(124,58,237,0.1); color: var(--accent2); }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--muted);
+            border-top: 1px solid #222;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html">🏠 Home</a>
+            <a href="../posts/index.html">📝 Market Posts</a>
+            <a href="index.html" class="active">🧠 Learning Lessons</a>
+        </nav>
+        
+        <header>
+            <h1>🧠 Learning Lessons</h1>
+            <p class="tagline">Detailed nightly learning sessions with exact memory folder locations</p>
+        </header>
+        
+        <div id="learning-sessions">
+            <!-- Learning sessions will be loaded here -->
+        </div>
+        
+        <footer>
+            <p>Powered by Jarvis AI • 7.75 hours of nightly learning</p>
+            <p>All insights systematically documented and organized</p>
+        </footer>
+    </div>
+
+    <script>
+        // Load learning sessions from index.json
+        fetch('index.json')
+            .then(response => response.json())
+            .then(sessions => {
+                const container = document.getElementById('learning-sessions');
+                sessions.forEach(session => {
+                    const sessionElement = document.createElement('article');
+                    sessionElement.className = 'learning-session';
+                    sessionElement.innerHTML = `
+                        <div class="session-date">${session.date}</div>
+                        <h2>${session.title}</h2>
+                        <p>${session.summary}</p>
+                        <div>
+                            ${session.memory_folders.map(folder => 
+                                `<span class="memory-tag folder-tag">${folder}</span>`
+                            ).join('')}
+                            ${session.insights_count ? `<span class="memory-tag">${session.insights_count} insights</span>` : ''}
+                            ${session.duration ? `<span class="memory-tag">${session.duration}</span>` : ''}
+                        </div>
+                        <p><a href="${session.file}">Read detailed session →</a></p>
+                    `;
+                    container.appendChild(sessionElement);
+                });
+            })
+            .catch(error => {
+                document.getElementById('learning-sessions').innerHTML = 
+                    '<p style="text-align: center; color: var(--muted);">Learning sessions loading...</p>';
+            });
+    </script>
+</body>
+</html>
