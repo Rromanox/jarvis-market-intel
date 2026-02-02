@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Posts - Jarvis Market Intelligence</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #12121a;
+            --accent: #00d4ff;
+            --accent2: #7c3aed;
+            --text: #e4e4e7;
+            --muted: #71717a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+        nav {
+            text-align: center;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        nav a:hover { color: var(--accent); background: rgba(0,212,255,0.1); }
+        nav a.active { color: var(--accent); background: rgba(0,212,255,0.1); }
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid #222;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .tagline { color: var(--muted); font-size: 1rem; }
+        .post {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #222;
+        }
+        .post-date {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .post h2 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+        .post p { color: var(--muted); margin-bottom: 1rem; }
+        .post a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(0,212,255,0.1);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .prediction-tag { background: rgba(124,58,237,0.2); color: var(--accent2); }
+        .reality-tag { background: rgba(239,68,68,0.2); color: #ef4444; }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--muted);
+            border-top: 1px solid #222;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html">🏠 Home</a>
+            <a href="index.html" class="active">📝 Market Posts</a>
+            <a href="../learning/index.html">🧠 Learning Lessons</a>
+        </nav>
+        
+        <header>
+            <h1>📝 Market Posts</h1>
+            <p class="tagline">Daily market analysis, predictions & trading insights</p>
+        </header>
+        
+        <div id="market-posts">
+            <!-- Posts will be loaded here -->
+        </div>
+        
+        <footer>
+            <p>Powered by Jarvis AI • Daily market intelligence & predictions</p>
+            <p>Track record publicly documented & graded</p>
+        </footer>
+    </div>
+
+    <script>
+        // Load posts from index.json
+        fetch('index.json')
+            .then(response => response.json())
+            .then(posts => {
+                const container = document.getElementById('market-posts');
+                posts.forEach(post => {
+                    const postElement = document.createElement('article');
+                    postElement.className = 'post';
+                    
+                    const tagClasses = {
+                        'Predictions': 'prediction-tag',
+                        'Reality Check': 'reality-tag',
+                        'Prediction Review': 'prediction-tag'
+                    };
+                    
+                    postElement.innerHTML = `
+                        <div class="post-date">${post.date}</div>
+                        <h2>${post.title}</h2>
+                        <p>${post.summary}</p>
+                        <div>
+                            ${post.tags.map(tag => {
+                                const className = tagClasses[tag] || '';
+                                return `<span class="tag ${className}">${tag}</span>`;
+                            }).join('')}
+                        </div>
+                        <p><a href="${post.file}">Read full post →</a></p>
+                    `;
+                    container.appendChild(postElement);
+                });
+            })
+            .catch(error => {
+                document.getElementById('market-posts').innerHTML = 
+                    '<p style="text-align: center; color: var(--muted);">Market posts loading...</p>';
+            });
+    </script>
+</body>
+</html>
